@@ -6,18 +6,17 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: debian-trixie
-    image: debian:trixie
-    pre_build_image: false
+  # Pre-built systemd-enabled image (geerlingguy) — avoids molecule-docker's
+  # Dockerfile build path, which breaks against current community.docker
+  # (docker_image 'build' finalization error). Debian 12 is a supported PVE base.
+  - name: debian12
+    image: geerlingguy/docker-debian12-ansible:latest
+    pre_build_image: true
     privileged: true
     cgroupns_mode: host
-    command: /lib/systemd/systemd
+    command: ""
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    tmpfs:
-      - /run
-      - /tmp
-    dockerfile: Dockerfile.j2
 provisioner:
   name: ansible
   env:
