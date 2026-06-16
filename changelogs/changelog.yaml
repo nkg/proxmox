@@ -1,6 +1,12 @@
 ---
 ancestor: null
 releases:
+  1.0.1:
+    release_date: "2026-06-16"
+    changes:
+      minor_changes:
+        - security — disable konstruktoid USBGuard by default (manage_usbguard=false); it blocks USB on a hypervisor and breaks console/passthrough.
+        - security — re-assert Proxmox-required sysctls after hardening (security_sysctl_overrides), re-enabling unprivileged user namespaces so unprivileged LXC keeps working.
   1.0.0:
     release_date: "2026-06-16"
     changes:

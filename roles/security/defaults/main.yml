@@ -27,6 +27,15 @@ security_manage_aide: true
 security_manage_auditd: false        # upstream pins auditd 3.x; Trixie ships 4.x
 security_disable_wireless: false
 security_disable_root_account: false # the Proxmox web GUI needs root PAM login
+security_manage_usbguard: false      # blocks USB by default — breaks console/USB passthrough on a hypervisor
+
+# Sysctls that konstruktoid sets but that Proxmox needs the other way. Applied
+# in a high-priority /etc/sysctl.d/99 drop-in AFTER hardening, so they win.
+# Re-enables unprivileged user namespaces (required for unprivileged LXC).
+# Add 'net.ipv4.ip_forward: 1' here if this host routes/NATs guest traffic.
+security_sysctl_overrides:
+  kernel.unprivileged_userns_clone: 1
+  user.max_user_namespaces: 15000
 
 # --- sshd hardening (key-only; forwarding kept for ProxyJump to guest VMs) ---
 security_sshd_password_authentication: false

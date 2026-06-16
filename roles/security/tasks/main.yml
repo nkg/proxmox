@@ -17,6 +17,7 @@
     manage_timesyncd: "{{ security_manage_timesyncd }}"
     manage_aide: "{{ security_manage_aide }}"
     manage_auditd: "{{ security_manage_auditd }}"
+    manage_usbguard: "{{ security_manage_usbguard }}"
     disable_wireless: "{{ security_disable_wireless }}"
     disable_root_account: "{{ security_disable_root_account }}"
     sshd_ports:
@@ -36,3 +37,21 @@
     packages_debian: "{{ security_packages_debian }}"
   when: security_apply_hardening | bool
   tags: [security, hardening]
+
+# konstruktoid disables unprivileged user namespaces (user.max_user_namespaces=0,
+# kernel.unprivileged_userns_clone=0), which breaks unprivileged LXC containers —
+# core Proxmox functionality. Re-assert the Proxmox-required values in a high-
+# priority drop-in that wins over the hardening sysctl file. Runs AFTER the
+# include_role above so it has the final say.
+- name: Re-assert Proxmox-required sysctls disabled by hardening
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    sysctl_file: /etc/sysctl.d/99-nkg-proxmox-overrides.conf
+    state: present
+    reload: true
+  loop: "{{ security_sysctl_overrides | dict2items }}"
+  when:
+    - security_apply_hardening | bool
+    - security_sysctl_overrides | length > 0
+  tags: [security, hardening, sysctl]

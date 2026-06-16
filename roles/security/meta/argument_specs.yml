@@ -39,6 +39,15 @@ argument_specs:
         type: bool
         default: false
         description: Let konstruktoid disable the root account (off — Proxmox GUI needs root PAM).
+      security_manage_usbguard:
+        type: bool
+        default: false
+        description: Let konstruktoid install/manage USBGuard (off — blocks USB/console/passthrough on a hypervisor).
+      security_sysctl_overrides:
+        type: dict
+        description: >-
+          Sysctls re-asserted after hardening via /etc/sysctl.d/99-nkg-proxmox-overrides.conf.
+          Defaults re-enable unprivileged user namespaces (needed for unprivileged LXC).
       security_sshd_password_authentication:
         type: bool
         default: false
