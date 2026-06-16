@@ -3,7 +3,11 @@
   hosts: all
   become: true
   vars:
-    host_base_hostname: molecule-pve
+    # A container's hostname is runtime-managed and can't be changed (the
+    # hostname module errors "Device or resource busy"). Point at the current
+    # hostname so that task is a no-op; the other host_base behaviour is what
+    # we're exercising here.
+    host_base_hostname: "{{ ansible_hostname }}"
     host_base_timezone: Europe/London
     # Keep CI fast — no full dist-upgrade, minimal package set.
     host_base_system_upgrade: false
