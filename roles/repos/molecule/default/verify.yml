@@ -3,6 +3,46 @@
   hosts: all
   become: true
   tasks:
+    - name: Gather distribution facts
+      ansible.builtin.setup:
+        gather_subset:
+          - min
+
+    # --- deb822 no-subscription repo ---
+    - name: Check the no-subscription .sources file was written
+      ansible.builtin.stat:
+        path: /etc/apt/sources.list.d/pve-no-subscription.sources
+      register: repos_verify_sources
+
+    - name: Read the .sources file
+      ansible.builtin.slurp:
+        src: /etc/apt/sources.list.d/pve-no-subscription.sources
+      register: repos_verify_sources_content
+      when: repos_verify_sources.stat.exists
+
+    - name: Assert the deb822 repo is correct
+      ansible.builtin.assert:
+        that:
+          - repos_verify_sources.stat.exists
+          - "'pve-no-subscription' in (repos_verify_sources_content.content | b64decode)"
+          - "ansible_distribution_release in (repos_verify_sources_content.content | b64decode)"
+          - "'Signed-By' in (repos_verify_sources_content.content | b64decode)"
+        fail_msg: "pve-no-subscription.sources missing or malformed"
+
+    # --- Proxmox signing key ---
+    - name: Check the Proxmox release key was installed
+      ansible.builtin.stat:
+        path: "/etc/apt/keyrings/proxmox-release-{{ ansible_distribution_release }}.gpg"
+      register: repos_verify_key
+
+    - name: Assert the signing key exists
+      ansible.builtin.assert:
+        that:
+          - repos_verify_key.stat.exists
+          - repos_verify_key.stat.size > 0
+        fail_msg: "Proxmox release signing key not installed"
+
+    # --- subscription-nag APT hook ---
     - name: Check the subscription-nag APT hook was installed
       ansible.builtin.stat:
         path: /etc/apt/apt.conf.d/no-nag-script

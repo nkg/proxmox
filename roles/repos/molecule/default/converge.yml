@@ -1,16 +1,15 @@
 ---
-# Container smoke test. The pve/Debian repo lines need the Proxmox archive key
-# and would break `apt update` on a plain Debian image, so repo management is
-# turned off here — this exercises the subscription-nag handling, which is the
-# container-safe part of the role.
+# Exercises the real deb822 path: enable the no-subscription repo (writes a
+# .sources file + installs the Proxmox signing key), keep enterprise/ceph off.
+# repos_update_cache stays off so we don't run apt update against the PVE repo.
 - name: Converge
   hosts: all
   become: true
   vars:
     repos_use_enterprise: false
-    repos_no_subscription: false
+    repos_no_subscription: true
     repos_ceph_enabled: false
-    repos_remove_subscription_nag: true   # JS file absent → patch skips; APT hook installed
+    repos_remove_subscription_nag: true
     repos_update_cache: false
   roles:
     - role: repos

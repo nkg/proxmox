@@ -15,6 +15,12 @@ repos_ceph_release: quincy
 # Debian base suite. Override for a non-default release if needed.
 repos_debian_suite: "{{ ansible_distribution_release }}"
 
+# Proxmox release signing key. Downloaded to the keyring path and referenced by
+# every Proxmox .sources file via Signed-By. Only fetched when a Proxmox repo
+# is enabled.
+repos_proxmox_key_url: "https://enterprise.proxmox.com/debian/proxmox-release-{{ repos_debian_suite }}.gpg"
+repos_proxmox_keyring_path: "/etc/apt/keyrings/proxmox-release-{{ repos_debian_suite }}.gpg"
+
 # Remove the "no valid subscription" nag dialog from the web UI.
 repos_remove_subscription_nag: true
 # Path to the web UI JS bundle that is patched, and the APT hook that

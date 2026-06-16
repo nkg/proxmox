@@ -2,12 +2,4 @@
 - name: Prepare
   hosts: all
   become: true
-  tasks:
-    # ansible.builtin.apt_repository needs gpg (apt-key was removed in modern
-    # Debian). A real Proxmox host always has gnupg; the minimal test image
-    # doesn't, so install it here.
-    - name: Install gnupg
-      ansible.builtin.apt:
-        name: gnupg
-        state: present
-        update_cache: true
+  tasks: []

@@ -28,7 +28,10 @@ See `defaults/main.yml` and `meta/argument_specs.yml`. Key options:
     - role: nkg.proxmox.repos
 ```
 
-## Status
+## Notes
 
-Scaffold. Concrete tasks to be ported from `Regularmusic/iac` once its
-outstanding PRs are merged.
+Repositories are written in the modern deb822 `.sources` format via
+`ansible.builtin.deb822_repository` (the deprecated `apt_repository`/`apt-key`
+path is no longer used). When any Proxmox repo is enabled, the Proxmox release
+signing key is installed to `repos_proxmox_keyring_path` and referenced from
+each `.sources` file via `Signed-By`.
