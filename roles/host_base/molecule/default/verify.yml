@@ -11,53 +11,53 @@
     - name: Check the timezone was set
       ansible.builtin.stat:
         path: /etc/localtime
-      register: localtime
+      register: host_base_verify_localtime
 
     - name: Read configured timezone
       ansible.builtin.command: cat /etc/timezone
-      register: tz
+      register: host_base_verify_tz
       changed_when: false
       failed_when: false
 
     - name: Assert timezone is Europe/London
       ansible.builtin.assert:
         that:
-          - localtime.stat.exists
-          - "'Europe/London' in tz.stdout"
+          - host_base_verify_localtime.stat.exists
+          - "'Europe/London' in host_base_verify_tz.stdout"
         fail_msg: "Timezone was not set to Europe/London"
 
     - name: Check a managed package is installed
       ansible.builtin.command: dpkg -s git
-      register: pkg
+      register: host_base_verify_pkg
       changed_when: false
-      failed_when: pkg.rc != 0
+      failed_when: host_base_verify_pkg.rc != 0
 
     - name: Check the sysctl drop-in exists
       ansible.builtin.stat:
         path: /etc/sysctl.d/90-nkg-proxmox.conf
-      register: sysctl_file
+      register: host_base_verify_sysctl
 
     - name: Assert sysctl drop-in was written
       ansible.builtin.assert:
         that:
-          - sysctl_file.stat.exists
+          - host_base_verify_sysctl.stat.exists
         fail_msg: "sysctl drop-in not found"
 
     - name: Check the limits drop-in exists
       ansible.builtin.stat:
         path: /etc/security/limits.d/90-nkg-proxmox.conf
-      register: limits_file
+      register: host_base_verify_limits
 
     - name: Read the limits drop-in
       ansible.builtin.slurp:
         src: /etc/security/limits.d/90-nkg-proxmox.conf
-      register: limits_content
-      when: limits_file.stat.exists
+      register: host_base_verify_limits_content
+      when: host_base_verify_limits.stat.exists
 
     - name: Assert limits drop-in has the nofile entry
       ansible.builtin.assert:
         that:
-          - limits_file.stat.exists
-          - "'nofile' in (limits_content.content | b64decode)"
-          - "'65536' in (limits_content.content | b64decode)"
+          - host_base_verify_limits.stat.exists
+          - "'nofile' in (host_base_verify_limits_content.content | b64decode)"
+          - "'65536' in (host_base_verify_limits_content.content | b64decode)"
         fail_msg: "limits drop-in missing the expected nofile entry"

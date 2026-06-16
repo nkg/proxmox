@@ -8,13 +8,13 @@
     - name: Check the AppArmor disable directory was created
       ansible.builtin.stat:
         path: /etc/apparmor.d/disable
-      register: aa_disable
+      register: host_config_verify_aa_disable
 
     - name: Assert AppArmor disable directory exists
       ansible.builtin.assert:
         that:
-          - aa_disable.stat.exists
-          - aa_disable.stat.isdir
+          - host_config_verify_aa_disable.stat.exists
+          - host_config_verify_aa_disable.stat.isdir
         fail_msg: "host_config lxc path did not create /etc/apparmor.d/disable"
 
     # HA units don't exist in the container; the disable-HA task uses
