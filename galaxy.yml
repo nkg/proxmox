@@ -41,7 +41,6 @@ build_ignore:
   - .github
   - .gitignore
   - .yamllint
-  - requirements.txt
   - "roles/*/molecule"
   - "*.tar.gz"
   - .pytest_cache

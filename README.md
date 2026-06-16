@@ -60,13 +60,22 @@ Configure and harden an already-running Proxmox host:
 
 ## Testing
 
+CI runs via the org's shared reusable workflows
+([`nkg/github-actions`](https://github.com/nkg/github-actions)): `ansible.yml`
+(ansible-lint) and `molecule.yml` (matrix over the testable roles), both using
+`uvx` so the tooling is always current.
+
 Roles with a container-testable scenario (`repos`, `host_base`, `host_config`,
 `crowdsec`) are verified with [Molecule](https://ansible.readthedocs.io/projects/molecule/)
-on Docker in CI:
+on Docker. Locally, with [uv](https://docs.astral.sh/uv/) installed:
 
 ```bash
-pip install -r requirements.txt
-cd roles/host_base && molecule test
+# lint
+uvx --with ansible ansible-lint
+
+# run one role's molecule scenario
+cd roles/host_base
+uvx --with ansible-core --with 'molecule-plugins[docker]' molecule test
 ```
 
 `api_access`, `security` and `hetzner_image` require a real Proxmox host / QEMU

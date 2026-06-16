@@ -7,28 +7,8 @@ name: Lint
   pull_request:
 
 jobs:
-  lint:
-    name: yamllint + ansible-lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the collection
-        uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Install tooling
-        run: pip install -r requirements.txt
-
-      - name: Install collection and role dependencies
-        run: |
-          ansible-galaxy collection install -r requirements.yml
-          ansible-galaxy role install -r requirements.yml
-
-      - name: Run yamllint
-        run: yamllint .
-
-      - name: Run ansible-lint
-        run: ansible-lint
+  ansible:
+    uses: nkg/github-actions/.github/workflows/ansible.yml@v2
+    with:
+      requirements-file: requirements.yml
+      run-syntax-check: false
