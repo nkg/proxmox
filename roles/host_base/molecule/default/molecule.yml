@@ -8,9 +8,9 @@ driver:
 platforms:
   # Pre-built systemd-enabled image (geerlingguy) — avoids molecule-docker's
   # Dockerfile build path, which breaks against current community.docker
-  # (docker_image 'build' finalization error). Debian 12 is a supported PVE base.
-  - name: debian12
-    image: geerlingguy/docker-debian12-ansible:latest
+  # (docker_image 'build' finalization error). Debian 13 (Trixie) matches the PVE 9 base.
+  - name: debian13
+    image: geerlingguy/docker-debian13-ansible:latest
     pre_build_image: true
     privileged: true
     cgroupns_mode: host
