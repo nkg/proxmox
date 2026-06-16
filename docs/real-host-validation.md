@@ -32,7 +32,7 @@ Or, from `homeservers/platform`, add to `ansible/requirements.yml`:
 collections:
   - name: https://github.com/nkg/ansible_proxmox.git
     type: git
-    version: main
+    version: v1
 roles:
   - src: https://github.com/konstruktoid/ansible-role-hardening/archive/refs/tags/v4.6.0.tar.gz
     name: konstruktoid.hardening

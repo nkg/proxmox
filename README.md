@@ -48,7 +48,7 @@ Or from a consuming repo's `requirements.yml`:
 collections:
   - name: https://github.com/nkg/ansible_proxmox.git
     type: git
-    version: main   # or a tag once releases are cut
+    version: v1   # floating major; or pin v1.0.0 for an exact release
 ```
 
 ## Playbooks
