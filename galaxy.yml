@@ -6,7 +6,7 @@ version: 1.0.0
 readme: README.md
 
 authors:
-  - nkg <neil@woowoosoft.com>
+  - nkg <neil@galv.in>
 
 description: >-
   Provision, configure, secure and harden Proxmox VE servers — including

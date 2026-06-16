@@ -1,0 +1,14 @@
+---
+# DESTRUCTIVE — provision Proxmox VE onto a Hetzner dedicated server booted into
+# rescue mode. This WIPES the disks listed in hetzner_image_disks.
+#
+#   ansible-playbook nkg.proxmox.bootstrap_hetzner -i rescue-inventory.yml
+#
+# Required variables (see roles/hetzner_image/README.md): hetzner_image_disks,
+# hetzner_image_hostname, hetzner_image_root_password_hashed,
+# hetzner_image_ssh_public_key, hetzner_image_email.
+- name: Bootstrap Proxmox VE on a Hetzner server (rescue mode)
+  hosts: hetzner_rescue
+  become: true
+  roles:
+    - nkg.proxmox.hetzner_image

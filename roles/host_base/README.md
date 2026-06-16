@@ -33,4 +33,5 @@ See `defaults/main.yml` and `meta/argument_specs.yml`.
 
 ## Status
 
-Scaffold. Adapted from the `common` role in homeservers/proxmox-ansible.
+Implemented and molecule-tested. Adapted from the `common` role in
+homeservers/proxmox-ansible.

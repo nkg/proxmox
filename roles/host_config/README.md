@@ -48,5 +48,5 @@ before enabling. ACME uses Cloudflare DNS-01 — supply `host_config_acme_cf_tok
 ## Status
 
 Ported from `Regularmusic/iac` `proxmox_setup`. The `apt.yml` (repo + nag)
-piece of that role lives in `nkg.proxmox.repos`; `admin_user.yml` is not yet
-ported (belongs in a future `nkg.proxmox.api_access` / user role).
+piece of that role lives in `nkg.proxmox.repos`, and the admin-user/API setup
+in `nkg.proxmox.api_access`.

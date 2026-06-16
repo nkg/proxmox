@@ -1,0 +1,22 @@
+---
+# Configure and harden an already-running Proxmox VE host.
+#
+#   ansible-galaxy collection install git+https://github.com/nkg/ansible_proxmox.git
+#   ansible-playbook nkg.proxmox.site -i your-inventory.yml
+#
+# Point the `proxmox` inventory group at your node(s). For the Terraform/IaC
+# API user + token, run nkg.proxmox.api_access separately (see its README).
+- name: Configure and harden Proxmox VE
+  hosts: proxmox
+  become: true
+  roles:
+    - nkg.proxmox.repos
+    - nkg.proxmox.host_base
+    - role: nkg.proxmox.host_config
+      vars:
+        # Companion fixes for the konstruktoid hardening applied below:
+        # restore the lxc-* AppArmor stubs and /tmp exec it would otherwise break.
+        host_config_lxc_apparmor_fix: true
+        host_config_tmp_exec_override: true
+    - nkg.proxmox.security
+    - nkg.proxmox.crowdsec

@@ -36,13 +36,37 @@ Each role has its own README with the full variable reference.
 
 ## Install
 
+Directly:
+
 ```bash
 ansible-galaxy collection install git+https://github.com/nkg/ansible_proxmox.git
 ```
 
+Or from a consuming repo's `requirements.yml`:
+
+```yaml
+collections:
+  - name: https://github.com/nkg/ansible_proxmox.git
+    type: git
+    version: main   # or a tag once releases are cut
+```
+
+## Playbooks
+
+The collection ships ready-to-run playbooks:
+
+```bash
+# configure + harden an existing Proxmox host (group: proxmox)
+ansible-playbook nkg.proxmox.site -i your-inventory.yml
+
+# DESTRUCTIVE: install Proxmox onto a Hetzner server in rescue mode
+ansible-playbook nkg.proxmox.bootstrap_hetzner -i rescue-inventory.yml
+```
+
 ## Quick start
 
-Configure and harden an already-running Proxmox host:
+`nkg.proxmox.site` is just this sequence — copy it into your own play to
+customise:
 
 ```yaml
 - hosts: proxmox
